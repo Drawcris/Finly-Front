@@ -18,7 +18,7 @@ export default function LoginForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const success = await login(username, password);
-        // @ts-ignore
+        /// @ts-ignore
         if (success) {
             router.push('/');
         } else {
