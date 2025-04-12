@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import axiosInstance from "@/lib/axios";
+import Link from 'next/link';
+
 
 
 export default function RegisterForm() {
@@ -143,10 +145,11 @@ export default function RegisterForm() {
 
                     <p className="text-center">
                         Masz już konto?{' '}
-                        <a href="/auth/login" className="text-blue-500 underline">
+                        <Link href="/auth/login" className="text-blue-500 underline">
                             Zaloguj się
-                        </a>
+                        </Link>
                     </p>
+
                 </form>
             </CardContent>
         </Card>

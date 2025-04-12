@@ -7,6 +7,7 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {useAuth} from "@/context/AuthContext";
 import {useRouter} from "next/navigation";
+import Link from 'next/link';
 
 export default function LoginForm() {
     const [username, setUsername] = useState('')
@@ -66,10 +67,11 @@ export default function LoginForm() {
 
                     <p className="text-center">
                         Nie masz konta?{' '}
-                        <a href="/auth/register" className="text-blue-500 underline">
+                        <Link href="/auth/register" className="text-blue-500 underline">
                             Zarejestruj się
-                        </a>
+                        </Link>
                     </p>
+
                 </form>
             </CardContent>
         </Card>
