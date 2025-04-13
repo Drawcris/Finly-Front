@@ -8,22 +8,31 @@ import { useEffect } from 'react'
 
 export default function DashboardPage() {
 
-    const { user, logout, isAuthenticated } = useAuth()
+    const { user, logout } = useAuth()
     const router = useRouter()
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            router.push('/auth/login')
+        const token = localStorage.getItem("access");
+        if (!token) {
+            router.push('/auth/login');
         }
-    }, [isAuthenticated, router])
+    }, [router]);
+
 
     return(
         <div className="container mx-auto p-6">
             <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold mb-6">Finly Pulpit</h1>
+                <h1 className="text-3xl font-bold mb-6">Finly.io</h1>
                 <div className="flex items-center space-x-4">
-                    <p>{user}</p>
-                    <Button className="bg-red-500" onClick={logout}>Wyloguj</Button>
+                    <p className="text-lg font-medium text-gray-600 space-x-1">
+                        <b>{user}</b>
+                        <i className="bi bi-person-fill"></i>
+                    </p>
+
+                    <Button onClick={logout} variant="outline" className="inline-flex items-center space-x-2 text-red-500 hover:text-red-600">
+                        <span>Logout</span>
+                        <i className="bi bi-box-arrow-left"></i>
+                    </Button>
                 </div>
             </div>
             <Dashboard />

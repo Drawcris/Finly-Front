@@ -22,9 +22,9 @@ export default function LoginForm() {
         /// @ts-ignore
         if (success) {
             router.push('/');
-        } else {
-          setError("Błędny login lub hasło")
         }
+
+
     }
 
     return (

@@ -29,18 +29,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const token = localStorage.getItem("access");
-        if (token) {
-            setUser('logged-in');
+        const storedUser = localStorage.getItem("user");
+        if (token && storedUser) {
+            setUser(storedUser);
         }
-    }, [])
+    }, []);
 
     const login = async (username: string, password: string) => {
         const res = await api.post('token/', { username, password });
         localStorage.setItem('access', res.data.access);
         localStorage.setItem('refresh', res.data.refresh);
-        setUser(username)
-        router.push('/dashboard')
-    }
+        localStorage.setItem('user', username); // Zapisz użytkownika
+        setUser(username);
+        router.push('/dashboard');
+    };
 
     const register = async (data: RegisterData) => {
         await api.post('register/', data);
@@ -51,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.removeItem('access');
         localStorage.removeItem('refresh');
         setUser(null);
-        router.push('/login');
+        router.push('/auth/login');
     }
 
     return (
