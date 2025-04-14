@@ -1,4 +1,4 @@
-# In progres
+# In progress
 
 ## Screens
 ![image](https://github.com/user-attachments/assets/d900ef9b-7bdc-4eb4-87a3-96631a76beb5)
