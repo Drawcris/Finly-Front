@@ -29,7 +29,6 @@ export function DialogAddTransaction() {
 
 
     useEffect(() => {
-        // Pobierz kategorie z API
         api.get("/categories/").then((res) => setCategories(res.data))
     }, [])
 
@@ -37,14 +36,14 @@ export function DialogAddTransaction() {
         const payload = {
             amount: parseFloat(amount),
             type,
-            category, // ID kategorii jako liczba
+            category,
             description,
             date: date?.toISOString().split("T")[0], // Formatowanie dla API (YYYY-MM-DD)
         }
 
         try {
             await api.post("/transactions/", payload)
-            window.location.reload() // Ewentualnie odświeżenie strony
+            window.location.reload()
         } catch (err: any) {
             console.error("Błąd przy dodawaniu transakcji", err.response?.data)
         }
@@ -65,7 +64,6 @@ export function DialogAddTransaction() {
                 </DialogHeader>
 
                 <div className="space-y-4">
-                    {/* Kwota */}
                     <div>
                         <Label>Kwota</Label>
                         <Input
@@ -75,8 +73,6 @@ export function DialogAddTransaction() {
                             onChange={(e) => setAmount(e.target.value)}
                         />
                     </div>
-
-                    {/* Typ transakcji */}
                     <div>
                         <Label>Typ transakcji</Label>
                         <Select value={type} onValueChange={setType}>
@@ -89,14 +85,12 @@ export function DialogAddTransaction() {
                             </SelectContent>
                         </Select>
                     </div>
-
-                    {/* Kategoria */}
                     <div>
                         <Label>Kategoria</Label>
                         <div className="flex items-center space-x-2">
                             <Select
                                 value={category !== null ? category.toString() : ""}
-                                onValueChange={(value) => setCategory(Number(value))} // Konwersja na number
+                                onValueChange={(value) => setCategory(Number(value))}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Wybierz kategorię" />
@@ -109,21 +103,16 @@ export function DialogAddTransaction() {
                                     ))}
                                 </SelectContent>
                             </Select>
-
-                            {/* Przycisk dodawania kategorii */}
                             <DialogAddCategory />
                         </div>
                     </div>
-
-
-                    {/* Data */}
                     <div>
                         <Label>Data</Label>
                         <Calendar
-                            selected={date} // Aktualna data
-                            onSelect={(newDate) => setDate(newDate as Date)} // Zapisz nową datę
-                            mode="single" // Wybór pojedynczego dnia
-                            className="border rounded-md" // Stylizacja komponentu
+                            selected={date}
+                            onSelect={(newDate) => setDate(newDate as Date)}
+                            mode="single"
+                            className="border rounded-md"
                         />
                         {date && (
                             <p className="text-sm text-gray-500">
@@ -131,9 +120,6 @@ export function DialogAddTransaction() {
                             </p>
                         )}
                     </div>
-
-
-                    {/* Opis */}
                     <div>
                         <Label>Opis</Label>
                         <Textarea

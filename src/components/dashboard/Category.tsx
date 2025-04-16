@@ -1,102 +1,128 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts'
-import {DialogAddCategory} from "@/components/dialog/DialogAddCategory";
-import api from '@/lib/api'
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
+import { DialogAddCategory } from "@/components/dialog/DialogAddCategory";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import api from '@/lib/api';
 
-type StatsResponse = {
-    balance: number
-    last_30_days: {
-        income: number
-        expense: number
-    }
-    most_expense_category: {
-        name: string
-        amount: number
-        icon: string
-    }
-    by_category: {
-        [category: string]: {
-            income: number
-            expense: number
-            icon: string
-        }
-    }
-    monthly: {
-        [month: string]: {
-            income: number
-            expense: number
-        }
-    }
-}
-
-
+type CategoryStats = {
+    category: string;
+    icon: string;
+    total_expense: number;
+    total_income: number;
+};
 
 export function Category() {
-    const [stats, setStats] = useState<StatsResponse | null>(null)
+    const [categories, setCategories] = useState<CategoryStats[]>([]);
+    const [orderBy, setOrderBy] = useState('total_expense'); // Domyślnie sortuj po wydatkach
+    const [direction, setDirection] = useState('desc'); // Domyślna kolejność malejąca
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        api
-            .get('/statistics/')
-            .then((res) => setStats(res.data))
-            .catch((err) => console.error(err))
-    }, [])
+        const fetchCategories = async () => {
+            setIsLoading(true);
+            try {
+                const res = await api.get('/category-list/', {
+                    params: {
+                        order_by: orderBy,
+                        direction: direction,
+                    },
+                });
+                setCategories(res.data);
+            } catch (error) {
+                console.error('Błąd podczas pobierania kategorii:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchCategories();
+    }, [orderBy, direction]); // Odświeża dane przy zmianie sortowania
 
-    if (!stats) return <p>Loading...</p>
+    if (isLoading) return <p>Ładowanie kategorii...</p>;
 
-    const categoryData = Object.entries(stats.by_category).map(([category, values]) => ({
-        name: category,
-        income: values.income,
-        expense: values.expense,
-    }))
+    // Dane do wykresu przychodów i wydatków
+    const incomeData = categories
+        .filter(({ total_income }) => total_income > 0)
+        .map(({ category, total_income }) => ({
+            name: category,
+            value: total_income,
+        }));
 
-    const incomeData = categoryData
-        .filter(({ income }) => income > 0)
-        .map(({ name, income }) => ({
-            name,
-            value: income,
-        }))
+    const expenseData = categories
+        .filter(({ total_expense }) => total_expense > 0)
+        .map(({ category, total_expense }) => ({
+            name: category,
+            value: total_expense,
+        }));
 
-    const expenseData = categoryData
-        .filter(({ expense }) => expense > 0)
-        .map(({ name, expense }) => ({
-            name,
-            value: expense,
-        }))
-
-    // Kolory dla segmentów
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF5E5E', '#9155FD'];
 
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {/* Lista kategorii */}
             <Card className="col-span-4">
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <CardTitle className="text-lg font-medium">Transakcje według kategorii</CardTitle>
                         <DialogAddCategory />
                     </div>
-
                 </CardHeader>
                 <CardContent>
+                    {/* Panel sortowania */}
+                    <div className="mb-4 flex items-center space-x-4">
+                        {/* Sortowanie według */}
+                        <div>
+                            <label htmlFor="order-by" className="text-sm font-medium block mb-1">
+                                Sortuj według:
+                            </label>
+                            <Select value={orderBy} onValueChange={setOrderBy}>
+                                <SelectTrigger id="order-by" className="w-[200px]">
+                                    <SelectValue placeholder="Wybierz opcję" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="total_expense">Wydatki</SelectItem>
+                                    <SelectItem value="total_income">Przychody</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Kierunek sortowania */}
+                        <div>
+                            <label htmlFor="direction" className="text-sm font-medium block mb-1">
+                                Kierunek:
+                            </label>
+                            <Select value={direction} onValueChange={setDirection}>
+                                <SelectTrigger id="direction" className="w-[200px]">
+                                    <SelectValue placeholder="Wybierz kierunek" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="desc">Malejąco</SelectItem>
+                                    <SelectItem value="asc">Rosnąco</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
+                    {/* Lista kategorii */}
                     <div className="space-y-4">
-                        {Object.entries(stats.by_category).map(([categoryName, categoryData], index) => (
+                        {categories.map((category, index) => (
                             <div
                                 key={index}
                                 className="flex items-center justify-between p-4 rounded-lg border shadow-sm hover:bg-gray-50"
                             >
-                                {/* Lewa sekcja: Ikona i nazwa kategorii */}
                                 <div className="flex items-center gap-3">
-                                    <span className="text-2xl">{categoryData.icon}</span>
-                                    <span className="text-md font-semibold">{categoryName}</span>
+                                    <span className="text-2xl">{category.icon}</span>
+                                    <span className="text-md font-semibold">{category.category}</span>
                                 </div>
 
-                                {/* Prawa sekcja: Przychody i wydatki */}
                                 <div className="flex items-center gap-4">
-                                    <span className="text-green-500 font-medium">+{categoryData.income} zł</span>
-                                    <span className="text-red-500 font-medium">-{categoryData.expense} zł</span>
+                                    <span className="text-green-500 font-medium">
+                                        +{category.total_income} zł
+                                    </span>
+                                    <span className="text-red-500 font-medium">
+                                        -{category.total_expense} zł
+                                    </span>
                                 </div>
                             </div>
                         ))}
@@ -104,6 +130,7 @@ export function Category() {
                 </CardContent>
             </Card>
 
+            {/* Wykres przychodów */}
             <Card className="col-span-2">
                 <CardHeader>
                     <CardTitle className="text-lg font-medium">Przychody według kategorii</CardTitle>
@@ -119,7 +146,7 @@ export function Category() {
                                 cy="50%"
                                 outerRadius={150}
                                 fill="#82ca9d"
-                                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`} // Etykiety z kategorią i procentowym udziałem
+                                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                             >
                                 {incomeData.map((_, index) => (
                                     <Cell key={`cell-income-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -131,6 +158,7 @@ export function Category() {
                 </CardContent>
             </Card>
 
+            {/* Wykres wydatków */}
             <Card className="col-span-2">
                 <CardHeader>
                     <CardTitle className="text-lg font-medium">Wydatki według kategorii</CardTitle>
@@ -146,7 +174,7 @@ export function Category() {
                                 cy="50%"
                                 outerRadius={150}
                                 fill="#ff6b6b"
-                                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`} // Etykiety z kategorią i procentowym udziałem
+                                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                             >
                                 {expenseData.map((_, index) => (
                                     <Cell key={`cell-expense-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -158,5 +186,5 @@ export function Category() {
                 </CardContent>
             </Card>
         </div>
-    )
+    );
 }

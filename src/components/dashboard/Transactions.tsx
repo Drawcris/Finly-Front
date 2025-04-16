@@ -90,7 +90,6 @@ export function Transactions() {
                             data={monthlyData}
                             margin={{ top: 20, right: 30, bottom: 20, left: 10 }}
                         >
-                            {/* Oś X */}
                             <XAxis
                                 dataKey="name"
                                 stroke="#888888"
@@ -98,15 +97,12 @@ export function Transactions() {
                                 tickLine={false}
                                 axisLine={false}
                             />
-                            {/* Oś Y */}
                             <YAxis
                                 stroke="#888888"
                                 fontSize={12}
                                 tickLine={false}
                                 axisLine={false}
                             />
-
-                            {/* Aktywne tooltipy */}
                             <Tooltip
                                 contentStyle={{
                                     borderRadius: "8px",
@@ -116,11 +112,7 @@ export function Transactions() {
                                 }}
                                 formatter={(value: number, name: string) => [`${value} zł`, name]}
                             />
-
-                            {/* Legenda */}
                             <Legend verticalAlign="top" align="right" iconType="circle" />
-
-                            {/* Linie danych */}
                             <Line
                                 type="monotone"
                                 dataKey="income"

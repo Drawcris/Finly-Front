@@ -30,7 +30,7 @@ export default function DashboardPage() {
                     </p>
 
                     <Button onClick={logout} variant="outline" className="inline-flex items-center space-x-2 text-red-500 hover:text-red-600">
-                        <span>Logout</span>
+                        <span>Wyloguj</span>
                         <i className="bi bi-box-arrow-left"></i>
                     </Button>
                 </div>
