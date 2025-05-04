@@ -45,3 +45,14 @@
  ## 📥 Export
  * Export dashboard and reports to CSV and PDF
 
+# 📸 Screens
+![image](https://github.com/user-attachments/assets/0e8af8d8-4e1d-42c6-b110-c94d1f618ebd)
+![image](https://github.com/user-attachments/assets/cc377c81-98ea-4696-a250-26675ba7b6d4)
+![image](https://github.com/user-attachments/assets/248384b0-919b-4712-b383-cb553c449fe1)
+![image](https://github.com/user-attachments/assets/9ccd6898-9046-449a-82da-e9cd329985ef)
+![image](https://github.com/user-attachments/assets/b4e75af8-f5e2-43ae-8849-7f0743985ef2)
+
+
+
+
+
