@@ -27,16 +27,16 @@
  * Export history to Excel
  * Categorized summary of transactions
   
- #🗓️ Calendar View
+ # 🗓️ Calendar View
   * Browse transactions by selected date
   
- #📂 Categories
+ # 📂 Categories
   * View income/expense by category
   * Add new categories
   * Sort categories
   * Pie charts for category-based visualizations
   
-  #💰 Budgeting
+  # 💰 Budgeting
   
   * Set budgets per category per month
   * Track budgeted vs spent amounts
