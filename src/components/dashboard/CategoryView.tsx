@@ -1,5 +1,8 @@
 'use client';
 
+import {
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption
+} from "@/components/ui/table";
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
@@ -14,10 +17,10 @@ type CategoryStats = {
     total_income: number;
 };
 
-export function Category() {
+export function CategoryView() {
     const [categories, setCategories] = useState<CategoryStats[]>([]);
-    const [orderBy, setOrderBy] = useState('total_expense'); // Domyślnie sortuj po wydatkach
-    const [direction, setDirection] = useState('desc'); // Domyślna kolejność malejąca
+    const [orderBy, setOrderBy] = useState('total_expense');
+    const [direction, setDirection] = useState('desc');
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -38,11 +41,10 @@ export function Category() {
             }
         };
         fetchCategories();
-    }, [orderBy, direction]); // Odświeża dane przy zmianie sortowania
+    }, [orderBy, direction]);
 
     if (isLoading) return <p>Ładowanie kategorii...</p>;
 
-    // Dane do wykresu przychodów i wydatków
     const incomeData = categories
         .filter(({ total_income }) => total_income > 0)
         .map(({ category, total_income }) => ({
@@ -69,9 +71,7 @@ export function Category() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    {/* Panel sortowania */}
                     <div className="mb-4 flex items-center space-x-4">
-                        {/* Sortowanie według */}
                         <div>
                             <label htmlFor="order-by" className="text-sm font-medium block mb-1">
                                 Sortuj według:
@@ -87,7 +87,6 @@ export function Category() {
                             </Select>
                         </div>
 
-                        {/* Kierunek sortowania */}
                         <div>
                             <label htmlFor="direction" className="text-sm font-medium block mb-1">
                                 Kierunek:
@@ -104,33 +103,34 @@ export function Category() {
                         </div>
                     </div>
 
-                    {/* Lista kategorii */}
-                    <div className="space-y-4">
-                        {categories.map((category, index) => (
-                            <div
-                                key={index}
-                                className="flex items-center justify-between p-4 rounded-lg border shadow-sm hover:bg-gray-50"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <span className="text-2xl">{category.icon}</span>
-                                    <span className="text-md font-semibold">{category.category}</span>
-                                </div>
-
-                                <div className="flex items-center gap-4">
-                                    <span className="text-green-500 font-medium">
+                    <Table>
+                        <TableCaption>Lista kategorii</TableCaption>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Ikona</TableHead>
+                                <TableHead>Kategoria</TableHead>
+                                <TableHead className="text-right">Przychody</TableHead>
+                                <TableHead className="text-right">Wydatki</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {categories.map((category, index) => (
+                                <TableRow key={index}>
+                                    <TableCell className="text-2xl">{category.icon}</TableCell>
+                                    <TableCell className="font-semibold">{category.category}</TableCell>
+                                    <TableCell className="text-right text-green-500 font-medium">
                                         +{category.total_income} zł
-                                    </span>
-                                    <span className="text-red-500 font-medium">
+                                    </TableCell>
+                                    <TableCell className="text-right text-red-500 font-medium">
                                         -{category.total_expense} zł
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </CardContent>
             </Card>
 
-            {/* Wykres przychodów */}
             <Card className="col-span-2">
                 <CardHeader>
                     <CardTitle className="text-lg font-medium">Przychody według kategorii</CardTitle>
@@ -158,7 +158,6 @@ export function Category() {
                 </CardContent>
             </Card>
 
-            {/* Wykres wydatków */}
             <Card className="col-span-2">
                 <CardHeader>
                     <CardTitle className="text-lg font-medium">Wydatki według kategorii</CardTitle>

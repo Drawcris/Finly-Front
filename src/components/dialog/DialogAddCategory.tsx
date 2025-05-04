@@ -11,18 +11,14 @@ export function DialogAddCategory() {
     const [categories, setCategories] = useState<{ id: number; name: string }[]>([])
 
     const handleAddCategory = async () => {
-        // Dodanie nowej kategorii
         const payload = { name: newCategoryName, icon: newCategoryIcon }
         try {
             const res = await api.post("/categories/", payload)
 
-            // Dodaj nową kategorię do stanu zamiast ponownego pobierania
             setCategories((prevCategories) => [
                 ...prevCategories,
-                { id: res.data.id, name: res.data.name }, // Zakładamy, że API zwraca `id` oraz `name`
+                { id: res.data.id, name: res.data.name },
             ])
-
-            // Wyczyść formularz
             setNewCategoryName("")
             setNewCategoryIcon("")
 

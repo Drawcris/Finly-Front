@@ -22,7 +22,7 @@ type StatsResponse = {
     };
 };
 
-export function Transactions() {
+export function TransactionsView() {
     const [stats, setStats] = useState<StatsResponse | null>(null);
 
     useEffect(() => {
@@ -82,7 +82,7 @@ export function Transactions() {
 
             <Card className="col-span-4">
                 <CardHeader>
-                    <CardTitle>Wydaki na tle miesięcy</CardTitle>
+                    <CardTitle>Wydatki na tle miesięcy</CardTitle>
                 </CardHeader>
                 <CardContent className="pl-2">
                     <ResponsiveContainer width="100%" height={350}>

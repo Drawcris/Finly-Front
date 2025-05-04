@@ -1,9 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Transactions} from "@/components/dashboard/Transactions";
-import {Category} from "@/components/dashboard/Category";
+import { TransactionsView} from "@/components/dashboard/TransactionsView";
+import {CategoryView} from "@/components/dashboard/CategoryView";
 import {DialogExport} from "@/components/dialog/export";
-import {TransactionHistory} from "@/components/dashboard/TransactionHistory";
+import {TransactionHistoryView} from "@/components/dashboard/TransactionHistoryView";
 import {DialogAddTransaction} from "@/components/dialog/DialogAddTransaction";
+import CalendarView from  "@/components/dashboard/CallendarView";
+import BudgetOverview from "@/components/dashboard/BudgetsView";
 
 export default function Dashboard() {
     return (
@@ -12,20 +14,28 @@ export default function Dashboard() {
 
             <Tabs defaultValue="user-transactions" className="space-y-4">
                 <TabsList>
-                    <TabsTrigger value="user-transactions">Transakcje</TabsTrigger>
+                    <TabsTrigger value="user-transactions">Podsumowanie</TabsTrigger>
                     <TabsTrigger value="user-transaction-history">Historia transakcji</TabsTrigger>
+                    <TabsTrigger value="user-calendar">Kalendarz</TabsTrigger>
                     <TabsTrigger value="user-category">Kategorie</TabsTrigger>
+                    <TabsTrigger value="user-budget">Budżet</TabsTrigger>
                     <DialogExport />
                     <DialogAddTransaction />
                 </TabsList>
                 <TabsContent value="user-transactions">
-                    <Transactions />
+                    <TransactionsView />
                 </TabsContent>
                 <TabsContent value="user-category">
-                    <Category />
+                    <CategoryView />
                 </TabsContent>
                 <TabsContent value="user-transaction-history">
-                    <TransactionHistory />
+                    <TransactionHistoryView />
+                </TabsContent>
+                <TabsContent value="user-calendar">
+                    <CalendarView />
+                </TabsContent>
+                <TabsContent value="user-budget">
+                    <BudgetOverview />
                 </TabsContent>
             </Tabs>
         </div>
