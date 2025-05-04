@@ -45,6 +45,9 @@
  ## 📥 Export
  * Export dashboard and reports to CSV and PDF
 
+## Link to Backend repository
+* https://github.com/Drawcris/Finly_API
+
 # 📸 Screens
 ![image](https://github.com/user-attachments/assets/0e8af8d8-4e1d-42c6-b110-c94d1f618ebd)
 ![image](https://github.com/user-attachments/assets/cc377c81-98ea-4696-a250-26675ba7b6d4)
