@@ -8,6 +8,7 @@
 * Database: PostgreSQL
 * Languages: Python, Typescript
 * Auth: JWT (Login & Registration)
+* Docker
 
 # 🧩 Features
 
