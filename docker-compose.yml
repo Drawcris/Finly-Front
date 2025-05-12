@@ -1,0 +1,41 @@
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: finly_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: #####
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  frontend:
+    build:
+      context: ./finly-front
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./finly-front:/app
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
+
+  backend:
+    build: /Finly
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./Finly:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_NAME=finly_db
+      - DB_USER=postgres
+      - DB_PASSWORD=####
+      - DB_HOST=db
+      - DB_PORT=5432
+volumes:
+  postgres_data:
